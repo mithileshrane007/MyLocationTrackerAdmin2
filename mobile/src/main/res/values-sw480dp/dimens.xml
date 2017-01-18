@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="iv_target">150dp</dimen>
+    <dimen name="iv_single_img">90dp</dimen>
+    <dimen name="tv_48dp">23dp</dimen>
+    <dimen name="tv_38dp">35dp</dimen>
+</resources>

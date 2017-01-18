@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="Msv">
+        <attr name="msvSearchBackgroud" format="reference" />
+        <attr name="msvHint" format="string"/>
+        <attr name="msvTextColor" format="color"/>
+        <attr name="msvTextColorHint" format="color"/>
+        <attr name="msvIsContainEnabled" format="boolean" />
+    </declare-styleable>
+
+</resources>

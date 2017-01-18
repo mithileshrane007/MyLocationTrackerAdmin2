@@ -1,0 +1,49 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rela_bar"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:layout_alignParentTop="true"
+    android:background="@color/colorPrimary"
+    android:theme="@style/AppTheme.AppBarOverlay"
+     >
+
+    <ImageButton
+        android:id="@+id/ibtn_back"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="15dp"
+        android:src="@drawable/md_nav_back" />
+
+    <Button
+        android:id="@+id/btn_previous"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="8dp"
+
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:gravity="center"
+        android:text="Previous"
+        android:textColor="#fff"
+ />
+
+    <Button
+        android:id="@+id/btn_title"
+        style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="15dp"
+        android:layout_toEndOf="@+id/ibtn_back"
+        android:layout_toStartOf="@+id/btn_previous"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:gravity="center|left"
+        android:text="Details"
+        android:textAllCaps="false"
+        android:textColor="#fff" />
+
+</RelativeLayout>

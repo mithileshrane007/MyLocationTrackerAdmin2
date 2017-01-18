@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_previous"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.infiny.mylocationtrackeradmin.Activities.PreviousActivity"
+    tools:showIn="@layout/activity_previous">
+
+
+    <LinearLayout
+        android:id="@+id/ll_filter_view"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@android:drawable/dialog_holo_light_frame"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tv_from_date"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawablePadding="@dimen/activity_horizontal_margin"
+            android:drawableStart="@drawable/calendar1"
+            android:gravity="center|left"
+            android:paddingLeft="10dp"
+
+            android:text="From date" />
+        <TextView
+            android:id="@+id/tv_to_date"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:drawablePadding="@dimen/activity_horizontal_margin"
+            android:drawableStart="@drawable/calendar1"
+            android:gravity="center|left"
+            android:paddingLeft="10dp"
+            android:text="To date" />
+        <TextView
+            android:id="@+id/tv_go"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1.4"
+            android:background="@drawable/button4"
+            android:gravity="center"
+            android:text="Go" />
+    </LinearLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view_previous_detal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_filter_view">
+
+    </android.support.v7.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/tv_no_records_prev_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="No records found."
+        android:textSize="@dimen/activity_horizontal_margin"
+        android:visibility="gone"/>
+
+
+
+</RelativeLayout>
