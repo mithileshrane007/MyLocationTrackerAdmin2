@@ -2,6 +2,7 @@ package com.example.infiny.mylocationtrackeradmin.Activities;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -12,7 +13,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.infiny.mylocationtrackeradmin.Helpers.SessionManager;
 import com.example.infiny.mylocationtrackeradmin.Interfaces.NetworkResponse;
 import com.example.infiny.mylocationtrackeradmin.NetworkUtils.ErrorVolleyUtils;
 import com.example.infiny.mylocationtrackeradmin.NetworkUtils.VolleyUtils;
@@ -26,14 +29,15 @@ import java.util.Map;
 
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
 
-    RelativeLayout content_sign_up,rel_signup,rel_login;
-    TextView tv_cmpy_id_txt,tv_passwd_txt,tv_register;
+    RelativeLayout content_sign_up,rel_signup,rel_login,rel_login_sucess;
+    TextView tv_cmpy_id_txt,tv_passwd_txt,tv_register,tv_details_sucess1;
     TextView tv_cmpy_name_title,tv_owner_name_title,tv_time_interval_title,tv_time_out_title;
 
     EditText tv_cmpy_id,tv_passwd;
     EditText tv_cmpy_name,tv_owner_name,tv_time_interval,tv_time_out,tv_passwd_signup;
     Button btn_sign_in,btn_sign_up;
     VolleyUtils volleyUtils;
+    SessionManager sessionManager;
     private Context mContext;
     private int flagScreen=0;
 
@@ -47,14 +51,14 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         getSupportActionBar().hide();
         mContext=this;
 
+        sessionManager=new SessionManager(mContext);
 
-
-        //Sapce gffdgdfg
         volleyUtils=new VolleyUtils();
 
         content_sign_up= (RelativeLayout) findViewById(R.id.content_sign_up);
         rel_signup= (RelativeLayout) findViewById(R.id.rel_signup);
         rel_login= (RelativeLayout) findViewById(R.id.rel_login);
+        rel_login_sucess= (RelativeLayout) findViewById(R.id.rel_login_sucess);
 
         tv_cmpy_id_txt= (TextView) findViewById(R.id.tv_cmpy_id_txt);
         tv_passwd_txt= (TextView) findViewById(R.id.tv_passwd_txt);
@@ -63,6 +67,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         tv_owner_name_title= (TextView) findViewById(R.id.tv_owner_name_title);
         tv_time_interval_title= (TextView) findViewById(R.id.tv_time_interval_title);
         tv_time_out_title= (TextView) findViewById(R.id.tv_time_out_title);
+        tv_details_sucess1= (TextView) findViewById(R.id.tv_details_sucess1);
 
         tv_cmpy_id= (EditText) findViewById(R.id.tv_cmpy_id);
         tv_passwd= (EditText) findViewById(R.id.tv_passwd);
@@ -78,6 +83,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         if (flagScreen==0) {
             rel_signup.setVisibility(View.GONE);
             rel_login.setVisibility(View.VISIBLE);
+            rel_login_sucess.setVisibility(View.GONE);
         }
         btn_sign_in.setOnClickListener(this);
         btn_sign_up.setOnClickListener(this);
@@ -118,6 +124,21 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                                 progressDialog.dismiss();
 
                                 JSONObject jsonObject=new JSONObject(result.toString());
+                                switch (jsonObject.getString("error"))
+                                {
+                                    case "0":
+                                        startActivity(new Intent(SignUpActivity.this,TargetActivity.class));
+                                        sessionManager.storeCompanyID(tv_cmpy_id.getText().toString().trim());
+
+                                        break;
+                                    case "1002":
+                                        Toast.makeText(mContext,"Invalid details.",Toast.LENGTH_SHORT).show();
+                                        break;
+                                    case "1003":
+                                        Toast.makeText(mContext,"Data is invalid",Toast.LENGTH_SHORT).show();
+
+                                        break;
+                                }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -151,6 +172,25 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                                 progressDialog.dismiss();
 
                                 JSONObject jsonObject=new JSONObject(result.toString());
+                                switch (jsonObject.getString("error"))
+                                {
+                                    case "0":
+                                        rel_signup.setVisibility(View.GONE);
+                                        rel_login.setVisibility(View.GONE);
+                                        rel_login_sucess.setVisibility(View.VISIBLE);
+                                        flagScreen=2;
+                                        tv_details_sucess1.setText(jsonObject.getString("company_user_id"));
+                                        Toast.makeText(mContext,"Successfully Created",Toast.LENGTH_SHORT).show();
+                                        break;
+                                    case "1002":
+                                        rel_signup.setVisibility(View.VISIBLE);
+                                        rel_login.setVisibility(View.GONE);
+                                        rel_login_sucess.setVisibility(View.GONE);
+
+                                        Toast.makeText(mContext,R.string.some_went_wrong_only,Toast.LENGTH_SHORT).show();
+                                        break;
+                                }
+
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -180,6 +220,12 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             flagScreen=0;
             rel_signup.setVisibility(View.GONE);
             rel_login.setVisibility(View.VISIBLE);
+            rel_login_sucess.setVisibility(View.GONE);
+
+
+        }else if (flagScreen==2)
+        {
+            rel_login_sucess.setVisibility(View.VISIBLE);
 
         }
         else

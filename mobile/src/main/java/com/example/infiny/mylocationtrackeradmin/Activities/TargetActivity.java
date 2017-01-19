@@ -1,5 +1,6 @@
 package com.example.infiny.mylocationtrackeradmin.Activities;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,14 +11,23 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.claudiodegio.msv.MaterialSearchView;
 import com.example.infiny.mylocationtrackeradmin.Adapter.TargetAdapter;
+import com.example.infiny.mylocationtrackeradmin.Helpers.SessionManager;
 import com.example.infiny.mylocationtrackeradmin.Interfaces.IClickListener;
+import com.example.infiny.mylocationtrackeradmin.Interfaces.NetworkResponse;
+import com.example.infiny.mylocationtrackeradmin.NetworkUtils.ErrorVolleyUtils;
+import com.example.infiny.mylocationtrackeradmin.NetworkUtils.VolleyUtils;
 import com.example.infiny.mylocationtrackeradmin.R;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TargetActivity extends AppCompatActivity implements IClickListener {
     MenuItem  menuItem;
@@ -28,7 +38,9 @@ public class TargetActivity extends AppCompatActivity implements IClickListener 
     TargetAdapter targetAdapter;
     TextView tv_no_records;
     boolean flag=false;
+    VolleyUtils volleyUtils;
     IClickListener iClickListener;
+    SessionManager sessionManager;
     private Context mContext;
 
     @Override
@@ -36,6 +48,8 @@ public class TargetActivity extends AppCompatActivity implements IClickListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_target);
         mContext=this;
+        volleyUtils=new VolleyUtils();
+        sessionManager=new SessionManager(mContext);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -49,21 +63,23 @@ public class TargetActivity extends AppCompatActivity implements IClickListener 
 //        } else {
 //            search_view.setQueryHint(Html.fromHtml("<font color = #fff/>" + "Search Target") );
 //        }
-
+        fetchData();
 
         iClickListener=this;
-        arrayList.add("January");
-        arrayList.add("February");
-        arrayList.add("March");
-        arrayList.add("April");
-        arrayList.add("May");
-        arrayList.add("June");
-        arrayList.add("July");
-        arrayList.add("August");
-        arrayList.add("September");
-        arrayList.add("October");
-        arrayList.add("November");
-        arrayList.add("December");
+//        arrayList.add("January");
+//        arrayList.add("February");
+//        arrayList.add("March");
+//        arrayList.add("April");
+//        arrayList.add("May");
+//        arrayList.add("June");
+//        arrayList.add("July");
+//        arrayList.add("August");
+//        arrayList.add("September");
+//        arrayList.add("October");
+//        arrayList.add("November");
+//        arrayList.add("December");
+//
+//
 
         targetAdapter=new TargetAdapter(this,arrayList,iClickListener,tv_no_records);
 
@@ -88,6 +104,41 @@ public class TargetActivity extends AppCompatActivity implements IClickListener 
                 return true;
             }
         });
+    }
+
+    private void fetchData() {
+        ProgressDialog progressDialog=new ProgressDialog(mContext);
+        progressDialog.setMessage("Please Wait...");
+        progressDialog.show();
+        Map<String, String> params =new HashMap<String, String>();
+        params.put("company_uid",sessionManager.getCompanyID());
+        volleyUtils.getUserList(params, new NetworkResponse() {
+            @Override
+            public void receiveResult(Object result) {
+                try {
+                    JSONObject jsonObject=new JSONObject(result.toString());
+                    switch (jsonObject.getString("error"))
+                    {
+                        case "0":
+                            if (jsonObject.getJSONArray("user_list").length()==0) {
+                                recycler_view.setVisibility(View.GONE);
+                                tv_no_records.setVisibility(View.VISIBLE);
+                            }
+                            else {
+                                recycler_view.setVisibility(View.VISIBLE);
+                                tv_no_records.setVisibility(View.GONE);
+
+                            }
+                            break;
+                        case "1002":
+                            break;
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        },new ErrorVolleyUtils(mContext,progressDialog));
     }
 
     @Override

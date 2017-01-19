@@ -24,6 +24,8 @@ public class SessionManager {
     private String CURRENT_LOC_LAT="latit";
     private String CURRENT_LOC_LONG="long";
     private String STORE_TIME="str_time";
+    private String COMPANY_ID="company_id";
+
 
 
     // Constructor
@@ -58,6 +60,14 @@ public class SessionManager {
     public void storeStartTime(long starttime) {
         editor.putLong(STORE_TIME,starttime);
         editor.commit();
+    }
+
+    public void storeCompanyID(String company_id) {
+        editor.putString(COMPANY_ID,company_id);
+        editor.commit();
+    }
+    public String getCompanyID() {
+        return pref.getString(COMPANY_ID,"");
     }
 
     public long getStoredTime() {

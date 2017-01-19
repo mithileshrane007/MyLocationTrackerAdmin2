@@ -17,6 +17,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.infiny.mylocationtrackeradmin.Helpers.SessionManager;
 import com.example.infiny.mylocationtrackeradmin.Interfaces.NetworkResponse;
 import com.example.infiny.mylocationtrackeradmin.NetworkUtils.ErrorVolleyUtils;
 import com.example.infiny.mylocationtrackeradmin.NetworkUtils.VolleyUtils;
@@ -35,12 +36,13 @@ public class AddTargetActivty extends AppCompatActivity {
 
     final Calendar myCalendar = Calendar.getInstance();
     ImageView iv_target;
-    TextInputLayout tv_name,tv_dob,tv_addr,tv_phone,tv_desp;
-    TextView tv_tracker_id;
+    TextInputLayout tv_name,tv_dob,tv_addr,tv_phone,tv_desp,tv_email;
+    TextView tv_tracker_id,tv_details_sucess1;
     Button btn_add_target;
     VolleyUtils volleyUtils;
     Switch switch_type;
     Bundle bundle;
+    SessionManager sessionManager;
     private Context mContext;
 
     @Override
@@ -50,6 +52,7 @@ public class AddTargetActivty extends AppCompatActivity {
 
         setContentView(R.layout.activity_add_target);
         mContext=this;
+        sessionManager=new SessionManager(mContext);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -70,9 +73,13 @@ public class AddTargetActivty extends AppCompatActivity {
         tv_name= (TextInputLayout) findViewById(R.id.tv_name);
         tv_dob= (TextInputLayout) findViewById(R.id.tv_dob);
         tv_phone= (TextInputLayout) findViewById(R.id.tv_phone);
+
+        tv_email= (TextInputLayout) findViewById(R.id.tv_email);
         tv_desp= (TextInputLayout) findViewById(R.id.tv_desp);
         tv_addr= (TextInputLayout) findViewById(R.id.tv_addr);
         tv_tracker_id= (TextView) findViewById(R.id.tv_tracker_id);
+        tv_details_sucess1= (TextView) findViewById(R.id.tv_details_sucess1);
+
         hideSoftKeyboard(tv_dob.getEditText());
         tv_dob.getEditText().setFocusable(false);
         btn_add_target= (Button) findViewById(R.id.btn_add_target);
@@ -89,7 +96,9 @@ public class AddTargetActivty extends AppCompatActivity {
                 params.put("phone",tv_phone.getEditText().getText().toString());
                 params.put("dateofbirth",tv_dob.getEditText().getText().toString());
                 params.put("description",tv_desp.getEditText().getText().toString());
-                params.put("company_id","1");
+                params.put("email_id",tv_email.getEditText().getText().toString());
+
+                params.put("company_id",sessionManager.getCompanyID());
                 params.put("track_id_reg",tv_tracker_id.getText().toString());
 
                 try {

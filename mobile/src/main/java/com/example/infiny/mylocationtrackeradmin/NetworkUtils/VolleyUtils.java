@@ -237,7 +237,46 @@ public class VolleyUtils {
     public void signIn(final Map<String, String> params, final NetworkResponse callback, final ErrorVolleyUtils errorCall){
 
 
-        String url= Config.BASE_URL + "login";
+        String url= Config.BASE_URL + "login_company";
+        StringRequest request=new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                callback.receiveResult(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                errorCall.onErrorResponse(error);
+            }
+        }){
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                return params;
+            }
+
+            @Override
+            public String getBodyContentType() {
+                return "application/x-www-form-urlencoded; charset=UTF-8";
+            }
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> mHeaders = new android.support.v4.util.ArrayMap<String, String>();
+                mHeaders.put("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+                mHeaders.put("Accept", "application/json");
+                return mHeaders;
+            }
+
+        };
+
+        AppActivity.getInstance().addToRequestQueue(request);
+    }
+
+    public void getUserList(final Map<String, String> params, final NetworkResponse callback, final ErrorVolleyUtils errorCall){
+
+
+        String url= Config.BASE_URL + "login_company";
         StringRequest request=new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
