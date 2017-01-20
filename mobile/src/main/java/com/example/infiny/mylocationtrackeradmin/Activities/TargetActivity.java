@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,15 +14,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.claudiodegio.msv.MaterialSearchView;
 import com.example.infiny.mylocationtrackeradmin.Adapter.TargetAdapter;
 import com.example.infiny.mylocationtrackeradmin.Helpers.SessionManager;
 import com.example.infiny.mylocationtrackeradmin.Interfaces.IClickListener;
 import com.example.infiny.mylocationtrackeradmin.Interfaces.NetworkResponse;
+import com.example.infiny.mylocationtrackeradmin.Models.CompanyList;
+import com.example.infiny.mylocationtrackeradmin.Models.User_list;
 import com.example.infiny.mylocationtrackeradmin.NetworkUtils.ErrorVolleyUtils;
 import com.example.infiny.mylocationtrackeradmin.NetworkUtils.VolleyUtils;
 import com.example.infiny.mylocationtrackeradmin.R;
+import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
@@ -34,13 +39,14 @@ public class TargetActivity extends AppCompatActivity implements IClickListener 
     SearchView search_view;
     MaterialSearchView materialSearchView;
     RecyclerView recycler_view;
-    ArrayList<String> arrayList= new ArrayList<String>();
+    ArrayList<User_list> arrayList= new ArrayList<User_list>();
     TargetAdapter targetAdapter;
     TextView tv_no_records;
     boolean flag=false;
     VolleyUtils volleyUtils;
     IClickListener iClickListener;
     SessionManager sessionManager;
+    SwipeRefreshLayout swipe_refresh_layout;
     private Context mContext;
 
     @Override
@@ -63,8 +69,8 @@ public class TargetActivity extends AppCompatActivity implements IClickListener 
 //        } else {
 //            search_view.setQueryHint(Html.fromHtml("<font color = #fff/>" + "Search Target") );
 //        }
-        fetchData();
 
+        search_view.clearFocus(); // close the keyboard on load
         iClickListener=this;
 //        arrayList.add("January");
 //        arrayList.add("February");
@@ -81,11 +87,34 @@ public class TargetActivity extends AppCompatActivity implements IClickListener 
 //
 //
 
-        targetAdapter=new TargetAdapter(this,arrayList,iClickListener,tv_no_records);
 
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
         recycler_view.setLayoutManager(linearLayoutManager);
-        recycler_view.setAdapter(targetAdapter);
+        swipe_refresh_layout= (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+        swipe_refresh_layout.setColorSchemeResources(R.color.colorPrimaryDark);
+        swipe_refresh_layout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                tv_no_records.setVisibility(View.GONE);
+                swipe_refresh_layout.setRefreshing(true);
+
+                fetchData();
+            }
+        });
+
+
+
+
+
+        swipe_refresh_layout.post(new Runnable() {
+                                      @Override
+                                      public void run() {
+                                          tv_no_records.setVisibility(View.GONE);
+                                          fetchData();
+                                      }
+                                  }
+        );
+
 //        recycler_view.addItemDecoration(new DividerItemDecoration(this,LinearLayoutManager.VERTICAL));
         search_view.setIconifiedByDefault(false);
 
@@ -99,7 +128,11 @@ public class TargetActivity extends AppCompatActivity implements IClickListener 
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                targetAdapter.getFilter().filter(newText);
+                try {
+                    targetAdapter.getFilter().filter(newText);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
                 return true;
             }
@@ -107,34 +140,75 @@ public class TargetActivity extends AppCompatActivity implements IClickListener 
     }
 
     private void fetchData() {
-        ProgressDialog progressDialog=new ProgressDialog(mContext);
+        final ProgressDialog progressDialog=new ProgressDialog(mContext);
         progressDialog.setMessage("Please Wait...");
-        progressDialog.show();
+//        progressDialog.show();
+        swipe_refresh_layout.setRefreshing(true);
+
+        progressDialog.setCancelable(false);
         Map<String, String> params =new HashMap<String, String>();
         params.put("company_uid",sessionManager.getCompanyID());
         volleyUtils.getUserList(params, new NetworkResponse() {
             @Override
             public void receiveResult(Object result) {
                 try {
+                    search_view.clearFocus(); // close the keyboard on load
+
                     JSONObject jsonObject=new JSONObject(result.toString());
                     switch (jsonObject.getString("error"))
                     {
                         case "0":
                             if (jsonObject.getJSONArray("user_list").length()==0) {
                                 recycler_view.setVisibility(View.GONE);
+                                swipe_refresh_layout.setRefreshing(false);
+
                                 tv_no_records.setVisibility(View.VISIBLE);
-                            }
-                            else {
-                                recycler_view.setVisibility(View.VISIBLE);
-                                tv_no_records.setVisibility(View.GONE);
+                                swipe_refresh_layout.setRefreshing(false);
 
                             }
+                            else {
+                                arrayList.clear();
+                                swipe_refresh_layout.setRefreshing(false);
+
+                                recycler_view.setVisibility(View.VISIBLE);
+                                tv_no_records.setVisibility(View.GONE);
+                                CompanyList companyList=new CompanyList();
+                                Gson gson=new Gson();
+                                companyList=gson.fromJson(jsonObject.toString(), CompanyList.class);
+
+                                User_list[] user_list=new User_list[companyList.getUser_list().length];
+                                user_list=companyList.getUser_list();
+                                for (int i=0;i<companyList.getUser_list().length;i++)
+                                {
+                                    arrayList.add(user_list[i]);
+                                }
+
+                                targetAdapter=new TargetAdapter(mContext,arrayList,iClickListener,tv_no_records);
+                                recycler_view.setAdapter(targetAdapter);
+
+
+
+                            }
+
+//                            progressDialog.dismiss();
                             break;
                         case "1002":
+//                            progressDialog.dismiss();
+                            swipe_refresh_layout.setRefreshing(false);
+
+                            tv_no_records.setVisibility(View.VISIBLE);
+                            recycler_view.setVisibility(View.GONE);
+                            Toast.makeText(mContext,"No data found",Toast.LENGTH_SHORT).show();
                             break;
                     }
 
                 } catch (Exception e) {
+                    swipe_refresh_layout.setRefreshing(false);
+                    search_view.clearFocus(); // close the keyboard on load
+
+//                    progressDialog.dismiss();
+                    tv_no_records.setVisibility(View.VISIBLE);
+                    recycler_view.setVisibility(View.GONE);
                     e.printStackTrace();
                 }
             }
@@ -147,6 +221,15 @@ public class TargetActivity extends AppCompatActivity implements IClickListener 
         menuItem=menu.findItem(R.id.add_target);
 
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==100&& resultCode==101)
+        {
+            fetchData();
+        }
     }
 
     @Override
@@ -174,15 +257,15 @@ public class TargetActivity extends AppCompatActivity implements IClickListener 
     }
 
     @Override
-    public void click(String data) {
+    public void click(User_list data) {
 //        if(true)
 //            startActivity(new Intent(TargetActivity.this,DetailsPreviousActivity.class));
 //
 //        else
         Intent intent=new Intent(TargetActivity.this,DetailsMapActivity.class);
-        Bundle bundle=new Bundle();
-        bundle.putString("data",data);
-        intent.putExtra("dataBundle",bundle);
+
+        intent.putExtra("dataBundle",data);
         startActivity(intent);
+
     }
 }

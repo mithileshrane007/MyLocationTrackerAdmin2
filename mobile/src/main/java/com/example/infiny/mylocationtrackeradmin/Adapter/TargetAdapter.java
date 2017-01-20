@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.infiny.mylocationtrackeradmin.Interfaces.IClickListener;
+import com.example.infiny.mylocationtrackeradmin.Models.User_list;
 import com.example.infiny.mylocationtrackeradmin.R;
 
 import java.util.ArrayList;
@@ -24,16 +25,33 @@ import java.util.ArrayList;
 
 public class TargetAdapter extends RecyclerView.Adapter<TargetAdapter.MyViewHolder> implements Filterable {
 
-    public ArrayList<String> arrayList;
-    public ArrayList<String> filteredData;
+    public ArrayList<User_list> arrayList;
+    public ArrayList<User_list> filteredData;
     TextView tv_no_records;
     IClickListener iClickListener;
     Context context;
 
-    public TargetAdapter(Context context, ArrayList<String> arrayList, IClickListener iClickListener, TextView tv_no_records) {
+    public TargetAdapter(Context context, User_list[] arrayList, IClickListener iClickListener, TextView tv_no_records) {
         this.context=context;
+        this.arrayList=new ArrayList<User_list>();
+        this.filteredData=new ArrayList<User_list>();
+        for (int i=0;i<arrayList.length;i++)
+        {
+            this.filteredData.add(arrayList[i]);
+        }
+//        this.arrayList=this.filteredData;
+
+        this.tv_no_records=tv_no_records;
+        this.arrayList.addAll(filteredData);
+
+        this.iClickListener=iClickListener;
+    }
+
+    public TargetAdapter(Context mContext, ArrayList<User_list> arrayList, IClickListener iClickListener, TextView tv_no_records) {
+        this.context=mContext;
+        this.arrayList=new ArrayList<User_list>();
+        this.filteredData=new ArrayList<User_list>();
         this.filteredData=arrayList;
-        this.arrayList = new ArrayList<String>();
 
         this.tv_no_records=tv_no_records;
         this.arrayList.addAll(filteredData);
@@ -56,7 +74,7 @@ public class TargetAdapter extends RecyclerView.Adapter<TargetAdapter.MyViewHold
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
-        holder.tv_name_target.setText(filteredData.get(position));
+        holder.tv_name_target.setText(filteredData.get(position).getName());
     }
 
     @Override
@@ -80,14 +98,14 @@ public class TargetAdapter extends RecyclerView.Adapter<TargetAdapter.MyViewHold
                 }
                 else
                 {
-                    for (String wp : arrayList)
+                    for (User_list wp : arrayList)
                     {
 
-                        if (containsChar(wp,charSequence.toString()))
+                        if (containsChar(wp.getName(),charSequence.toString()))
                         {
                             filteredData.add(wp);
                         }else {
-                            Log.d("data", ""+wp.compareToIgnoreCase(charSequence.toString()));
+                            Log.d("data", ""+wp.getName().compareToIgnoreCase(charSequence.toString()));
                         }
 //                        if (wp.contains(charSequence.toString()))
 //                        {

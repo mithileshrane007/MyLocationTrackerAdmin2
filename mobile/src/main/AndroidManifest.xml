@@ -23,6 +23,7 @@
         <activity
             android:name=".Activities.TargetActivity"
             android:label="@string/title_activity_target"
+
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden" />
         <activity
@@ -50,7 +51,8 @@
         <activity
             android:name=".Activities.SignUpActivity"
             android:label="@string/title_activity_sign_up"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden"></activity>
     </application>
 
 </manifest>

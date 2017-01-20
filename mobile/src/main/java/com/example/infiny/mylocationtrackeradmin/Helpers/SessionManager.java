@@ -13,6 +13,7 @@ public class SessionManager {
     private static final String CLICKED = "clicked";
     // Sharedpref file name
     private static final String PREF_NAME = "Near";
+    private static final String LOGIN_PREF = "login";
     SharedPreferences pref;
     // Editor for Shared preferences
     SharedPreferences.Editor editor;
@@ -83,6 +84,14 @@ public class SessionManager {
         editor.commit();
     }
 
+    public boolean isLogin() {
+        return pref.getBoolean(LOGIN_PREF,false);
+    }
+
+    public void setLogin(boolean isLogin) {
+        editor.putBoolean(LOGIN_PREF,isLogin);
+        editor.commit();
+    }
 
 
 }

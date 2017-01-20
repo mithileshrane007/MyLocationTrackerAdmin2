@@ -276,7 +276,7 @@ public class VolleyUtils {
     public void getUserList(final Map<String, String> params, final NetworkResponse callback, final ErrorVolleyUtils errorCall){
 
 
-        String url= Config.BASE_URL + "login_company";
+        String url= Config.BASE_URL + "get_user_list_of_company";
         StringRequest request=new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

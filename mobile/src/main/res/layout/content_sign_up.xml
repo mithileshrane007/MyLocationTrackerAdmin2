@@ -112,7 +112,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center|center_vertical|center_horizontal"
                 android:padding="@dimen/activity_horizontal_margin"
-               >
+                >
                 <TextView
                     android:id="@+id/tv_cmpy_name_title"
                     android:layout_width="match_parent"
@@ -239,69 +239,60 @@
         </ScrollView>
     </RelativeLayout>
 
+
+
     <RelativeLayout
         android:id="@+id/rel_login_sucess"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="center|center_vertical|center_horizontal"
+        android:padding="@dimen/activity_horizontal_margin"
         android:visibility="gone">
-        <ScrollView
+
+
+        <TextView
+            android:id="@+id/tv_details_sucess"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Your Company ID is :"
+            android:textColor="@android:color/white"
+            android:textSize="25dp" />
+        <TextView
+            android:id="@+id/tv_details_sucess1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_details_sucess"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center_horizontal|center"
+            android:text="458 545"
+            android:textColor="@android:color/white"
+            android:textIsSelectable="true"
+            android:textSize="25dp"
+            android:textStyle="bold|italic" />
+        <TextView
+            android:id="@+id/tv_details_sucess2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_details_sucess1"
+            android:layout_centerInParent="true"
+            android:text="Please safe further use."
+            android:textColor="@android:color/white"
+
+            android:textSize="25dp" />
+        <Button
+            android:id="@+id/btn_continue"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true">
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center|center_vertical|center_horizontal"
-                android:padding="@dimen/activity_horizontal_margin"
-                android:requiresFadingEdge="vertical"
-                >
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_details_sucess2"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:background="@android:color/holo_red_light"
+            android:text="Continue"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/activity_horizontal_margin"/>
 
-
-                <TextView
-                    android:id="@+id/tv_details_sucess"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:text="Your Company ID is :"
-                    android:textColor="@android:color/white"
-                    android:textSize="25dp" />
-                <TextView
-                    android:id="@+id/tv_details_sucess1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tv_details_sucess"
-                    android:layout_centerInParent="true"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:gravity="center_horizontal|center"
-                    android:text="458 545"
-                    android:textColor="@android:color/white"
-                    android:textSize="25dp"
-                    android:textStyle="bold|italic" />
-                <TextView
-                    android:id="@+id/tv_details_sucess2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tv_details_sucess1"
-                    android:layout_centerInParent="true"
-                    android:text="Please safe further use."
-                    android:textColor="@android:color/white"
-
-                    android:textSize="25dp" />
-                <Button
-                    android:id="@+id/btn_continue"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tv_details_sucess2"
-                    android:layout_marginTop="@dimen/activity_horizontal_margin"
-                    android:background="@android:color/holo_red_light"
-                    android:text="Continue"
-                    android:textAllCaps="false"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/activity_horizontal_margin"/>
-
-            </RelativeLayout>
-        </ScrollView>
     </RelativeLayout>
-
 </RelativeLayout>

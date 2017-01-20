@@ -1,10 +1,11 @@
 package com.example.infiny.mylocationtrackeradmin.Models;
 
+import java.io.Serializable;
+
 /**
  * Created by infiny on 19/1/17.
  */
-public class User_list
-{
+public class User_list implements Serializable {
     private String id;
 
     private String company_id;

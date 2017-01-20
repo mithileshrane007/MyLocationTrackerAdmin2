@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.example.infiny.mylocationtrackeradmin.Helpers.SessionManager;
+import com.example.infiny.mylocationtrackeradmin.Models.User_list;
 import com.example.infiny.mylocationtrackeradmin.R;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -28,6 +29,7 @@ public class DetailsMapActivity extends AppCompatActivity implements View.OnClic
     MapView mMapView;
     Button btn_title, btn_previous;
     SessionManager sessionManager;
+    User_list bundle;
     private Context mContext;
     private GoogleMap mMap;
 
@@ -46,10 +48,10 @@ public class DetailsMapActivity extends AppCompatActivity implements View.OnClic
 //
 //
 
-        Bundle bundle=getIntent().getBundleExtra("dataBundle");
+        bundle= (User_list) getIntent().getSerializableExtra("dataBundle");
         if (bundle!=null)
         {
-            btn_title.setText(bundle.getString("data"));
+            btn_title.setText(bundle.getName());
         }
 
         ibtn_back.setOnClickListener(this);
@@ -120,7 +122,9 @@ public class DetailsMapActivity extends AppCompatActivity implements View.OnClic
                 onBackPressed();
                 break;
             case R.id.btn_title:
-                startActivity(new Intent(DetailsMapActivity.this,AddTargetActivty.class));
+                Intent intent=new Intent(DetailsMapActivity.this,AddTargetActivty.class);
+                intent.putExtra("details",bundle);
+                startActivity(intent);
                 break;
             case R.id.btn_previous:
                 startActivity(new Intent(DetailsMapActivity.this,PreviousActivity.class));
