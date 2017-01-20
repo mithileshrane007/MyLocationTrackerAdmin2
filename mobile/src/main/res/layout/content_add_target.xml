@@ -40,6 +40,7 @@
                 android:textSize="18dp"
                 />
 
+
             <TextView
                 android:id="@+id/tv_generate_tracker_id"
                 android:layout_width="wrap_content"
