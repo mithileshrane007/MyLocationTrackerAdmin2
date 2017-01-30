@@ -2,6 +2,10 @@ package com.example.infiny.mylocationtrackeradmin.NetworkUtils;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -23,6 +27,10 @@ public class ErrorVolleyUtils implements Response.ErrorListener  {
 
     private final Context mContext;
     ProgressDialog progressDialog;
+    SwipeRefreshLayout swipe_refresh_layout;
+    TextView tv_no_records;
+    RecyclerView recycler_view;
+
     public ErrorVolleyUtils(Context context)
     {
         this.mContext=context;
@@ -31,6 +39,22 @@ public class ErrorVolleyUtils implements Response.ErrorListener  {
     public ErrorVolleyUtils(Context mContext, ProgressDialog progressDialog) {
         this.mContext=mContext;
         this.progressDialog=progressDialog;
+    }
+
+
+    public ErrorVolleyUtils(Context mContext, ProgressDialog progressDialog, SwipeRefreshLayout swipe_refresh_layout, TextView tv_no_records, RecyclerView recycler_view) {
+        this.mContext=mContext;
+        this.progressDialog=progressDialog;
+        this.swipe_refresh_layout=swipe_refresh_layout;
+        this.tv_no_records=tv_no_records;
+        this.recycler_view=recycler_view;
+    }
+
+    public ErrorVolleyUtils(Context mContext, ProgressDialog progressDialog, TextView tv_no_records, RecyclerView recycler_view) {
+        this.mContext=mContext;
+        this.progressDialog=progressDialog;
+        this.tv_no_records=tv_no_records;
+        this.recycler_view=recycler_view;
     }
 
     @Override
@@ -69,5 +93,14 @@ public class ErrorVolleyUtils implements Response.ErrorListener  {
                 progressDialog.dismiss();
 
             }
+        if (swipe_refresh_layout!=null)
+            if (swipe_refresh_layout.isRefreshing())
+            {
+                swipe_refresh_layout.setRefreshing(false);
+            }
+        if (recycler_view!=null)
+            recycler_view.setVisibility(View.GONE);
+        if (tv_no_records!=null)
+            tv_no_records.setVisibility(View.VISIBLE);
     }
 }

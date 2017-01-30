@@ -5,7 +5,6 @@
     android:id="@+id/content_sign_up"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/homescreen_min"
 
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.infiny.mylocationtrackeradmin.Activities.SignUpActivity"
@@ -32,9 +31,8 @@
                     android:id="@+id/tv_cmpy_id_txt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Company ID"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/activity_horizontal_margin"/>
+                    android:text="Login ID"
+                   android:textSize="@dimen/activity_horizontal_margin"/>
 
 
                 <EditText
@@ -43,17 +41,13 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tv_cmpy_id_txt"
                     android:text=""
-                    android:textColor="@android:color/white"
-                    app:backgroundTint="@android:color/white"
-                    />
+                   />
                 <TextView
                     android:id="@+id/tv_passwd_txt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tv_cmpy_id"
-
                     android:text="Password"
-                    android:textColor="@android:color/white"
                     android:textSize="@dimen/activity_horizontal_margin"/>
 
 
@@ -62,10 +56,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tv_passwd_txt"
+                    android:inputType="textPassword"
                     android:text=""
-
-                    android:textColor="@android:color/white"
-                    app:backgroundTint="@android:color/white"
                     />
 
                 <Button
@@ -75,8 +67,8 @@
                     android:layout_below="@+id/tv_passwd"
                     android:layout_marginTop="@dimen/activity_horizontal_margin"
                     android:background="@android:color/holo_red_light"
-
                     android:text="Sign In"
+
                     android:textAllCaps="false"
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/activity_horizontal_margin"/>
@@ -89,7 +81,7 @@
                     android:layout_marginTop="15dp"
                     android:padding="5dp"
                     android:text="Not Register?"
-                    android:textColor="@android:color/white"/>
+                   />
             </RelativeLayout>
         </ScrollView>
     </RelativeLayout>
@@ -113,14 +105,14 @@
                 android:gravity="center|center_vertical|center_horizontal"
                 android:padding="@dimen/activity_horizontal_margin"
                 >
+
                 <TextView
                     android:id="@+id/tv_cmpy_name_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Company Name"
+                    android:text="Name"
 
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/activity_horizontal_margin"/>
+                   android:textSize="@dimen/activity_horizontal_margin"/>
 
 
                 <EditText
@@ -128,18 +120,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tv_cmpy_name_title"
-                    android:text=""
-                    android:textColor="@android:color/white"
-                    app:backgroundTint="@android:color/white"
-                    />
+                    android:text=""                  />
                 <TextView
                     android:id="@+id/tv_owner_name_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tv_cmpy_name"
 
-                    android:text="Founder Name"
-                    android:textColor="@android:color/white"
+                    android:text="Email"
                     android:textSize="@dimen/activity_horizontal_margin"/>
 
 
@@ -148,21 +136,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tv_owner_name_title"
+                    android:inputType="textEmailAddress"
                     android:text=""
 
-                    android:textColor="@android:color/white"
-                    app:backgroundTint="@android:color/white"
-                    />
+                />
 
                 <TextView
                     android:id="@+id/tv_time_interval_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tv_owner_name"
-
                     android:text="Time Interval Tracker"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/activity_horizontal_margin"/>
+                    android:textSize="@dimen/activity_horizontal_margin"
+                    android:visibility="gone"/>
 
 
                 <EditText
@@ -172,41 +158,39 @@
                     android:layout_below="@+id/tv_time_interval_title"
                     android:inputType="number"
                     android:text=""
+                    android:visibility="gone"
 
-                    android:textColor="@android:color/white"
-                    app:backgroundTint="@android:color/white"
+
                     />
 
                 <TextView
-                    android:id="@+id/tv_time_out_title"
+                    android:id="@+id/tv_addr_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tv_time_interval"
 
-                    android:text="Time Out Tracker (hrs)"
-                    android:textColor="@android:color/white"
+                    android:text="Phone"
                     android:textSize="@dimen/activity_horizontal_margin"/>
 
 
                 <EditText
-                    android:id="@+id/tv_time_out"
+                    android:id="@+id/tv_addr"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/tv_time_out_title"
+                    android:layout_below="@+id/tv_addr_title"
                     android:inputType="number"
+                    android:maxLength="10"
                     android:text=""
-                    android:textColor="@android:color/white"
-                    app:backgroundTint="@android:color/white"
+
                     />
 
                 <TextView
                     android:id="@+id/tv_passwd_signup_txt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/tv_time_out"
+                    android:layout_below="@+id/tv_addr"
 
                     android:text="Password"
-                    android:textColor="@android:color/white"
                     android:textSize="@dimen/activity_horizontal_margin"/>
 
 
@@ -217,17 +201,37 @@
                     android:layout_below="@+id/tv_passwd_signup_txt"
                     android:text=""
 
-                    android:textColor="@android:color/white"
-                    app:backgroundTint="@android:color/white"
+
+                    />
+
+                <TextView
+                    android:id="@+id/tv_passwd_signup_confirm_txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_passwd_signup"
+
+                    android:text="Confirm Password"
+                    android:textSize="@dimen/activity_horizontal_margin"/>
+
+
+                <EditText
+                    android:id="@+id/tv_passwd_signup_confirm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_passwd_signup_confirm_txt"
+                    android:text=""
+
+
                     />
 
                 <Button
                     android:id="@+id/btn_sign_up"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/tv_passwd_signup"
+                    android:layout_below="@+id/tv_passwd_signup_confirm"
                     android:layout_marginTop="25dp"
                     android:background="@android:color/holo_red_light"
+
                     android:text="Create"
                     android:textAllCaps="false"
                     android:textColor="@android:color/white"
@@ -255,8 +259,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Your Company ID is :"
-            android:textColor="@android:color/white"
+            android:text="Your Login ID is :"
             android:textSize="25dp" />
         <TextView
             android:id="@+id/tv_details_sucess1"
@@ -268,7 +271,6 @@
             android:layout_marginTop="5dp"
             android:gravity="center_horizontal|center"
             android:text="458 545"
-            android:textColor="@android:color/white"
             android:textIsSelectable="true"
             android:textSize="25dp"
             android:textStyle="bold|italic" />
@@ -279,7 +281,6 @@
             android:layout_below="@+id/tv_details_sucess1"
             android:layout_centerInParent="true"
             android:text="Please safe further use."
-            android:textColor="@android:color/white"
 
             android:textSize="25dp" />
         <Button
@@ -295,4 +296,6 @@
             android:textSize="@dimen/activity_horizontal_margin"/>
 
     </RelativeLayout>
+
+
 </RelativeLayout>

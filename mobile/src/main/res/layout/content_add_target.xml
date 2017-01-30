@@ -51,6 +51,7 @@
                 android:text="Generate"
                 android:textColor="@android:color/holo_blue_dark"
                 android:textSize="18dp"
+                android:visibility="gone"
                 />
             <TextView
                 android:id="@+id/tv_tracker_id_text"
@@ -138,11 +139,64 @@
 
                     />
             </android.support.design.widget.TextInputLayout>
+
+
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/tv_time_interval"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_email">
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Time Interval"
+                    android:inputType="number"
+                    android:maxLength="10"
+                    android:maxLines="1"
+                    android:textSize="@dimen/activity_horizontal_margin"
+
+                    />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/tv_time_out"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_time_interval">
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Time out"
+                    android:inputType="number"
+                    android:maxLength="10"
+                    android:maxLines="1"
+                    android:textSize="@dimen/activity_horizontal_margin"
+
+                    />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/tv_pass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_time_out">
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Password"
+                    android:maxLines="1"
+                    android:textSize="@dimen/activity_horizontal_margin"
+
+                    />
+            </android.support.design.widget.TextInputLayout>
+
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/tv_desp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_email">
+                android:layout_below="@+id/tv_pass">
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
@@ -157,6 +211,7 @@
 
 
 
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -164,6 +219,8 @@
                 android:layout_marginRight="15dp"
                 android:layout_toStartOf="@+id/switch_type"
                 android:text="Employee"
+                android:visibility="gone"
+
 
                 />
             <TextView
@@ -171,9 +228,10 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/switch_type"
                 android:layout_marginLeft="15dp"
-
                 android:layout_toEndOf="@+id/switch_type"
+
                 android:text="Manager"
+                android:visibility="gone"
 
                 />
 
@@ -186,7 +244,8 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="@dimen/activity_horizontal_margin"
                 android:gravity="center"
-                android:textColor="#008F36"/>
+                android:textColor="#008F36"
+                android:visibility="gone"/>
 
             <Button
                 android:id="@+id/btn_add_target"

@@ -158,7 +158,7 @@ public class VolleyUtils {
     public void add_user(final Map<String, String> params, final NetworkResponse callback, final ErrorVolleyUtils errorCall){
 
 
-        String url= Config.BASE_URL + "add_user";
+        String url= Config.BASE_URL + "api_add_target";
         StringRequest request=new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -197,7 +197,7 @@ public class VolleyUtils {
     public void signUp(final Map<String, String> params, final NetworkResponse callback, final ErrorVolleyUtils errorCall){
 
 
-        String url= Config.BASE_URL + "add_company";
+        String url= Config.BASE_URL + "api_add_user";
         StringRequest request=new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -237,7 +237,7 @@ public class VolleyUtils {
     public void signIn(final Map<String, String> params, final NetworkResponse callback, final ErrorVolleyUtils errorCall){
 
 
-        String url= Config.BASE_URL + "login_company";
+        String url= Config.BASE_URL + "api_login";
         StringRequest request=new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -308,8 +308,39 @@ public class VolleyUtils {
             }
 
         };
-
         AppActivity.getInstance().addToRequestQueue(request);
     }
 
+    public void generatePin(final NetworkResponse callback, final ErrorVolleyUtils errorCall) {
+
+        String url= Config.BASE_URL + "api_generate_track_id";
+        StringRequest request=new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                callback.receiveResult(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                errorCall.onErrorResponse(error);
+            }
+        }){
+
+            @Override
+            public String getBodyContentType() {
+                return "application/x-www-form-urlencoded; charset=UTF-8";
+            }
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> mHeaders = new android.support.v4.util.ArrayMap<String, String>();
+                mHeaders.put("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+                mHeaders.put("Accept", "application/json");
+                return mHeaders;
+            }
+        };
+
+        AppActivity.getInstance().addToRequestQueue(request);
+
+    }
 }

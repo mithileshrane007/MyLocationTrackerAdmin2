@@ -212,7 +212,7 @@ public class TargetActivity extends AppCompatActivity implements IClickListener 
                     e.printStackTrace();
                 }
             }
-        },new ErrorVolleyUtils(mContext,progressDialog));
+        },new ErrorVolleyUtils(mContext,progressDialog,swipe_refresh_layout,tv_no_records,recycler_view));
     }
 
     @Override
@@ -226,6 +226,8 @@ public class TargetActivity extends AppCompatActivity implements IClickListener 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        search_view.clearFocus(); // close the keyboard on load
+
         if (requestCode==100&& resultCode==101)
         {
             fetchData();
@@ -242,8 +244,25 @@ public class TargetActivity extends AppCompatActivity implements IClickListener 
                 break;
 
             case R.id.add_target:
-                Intent intent=new Intent(this,AddTargetActivty.class);
-                startActivityForResult(intent,100);
+                final Intent intent=new Intent(this,AddTargetActivty.class);
+                final ProgressDialog progressDialog=new ProgressDialog(mContext);
+                progressDialog.setMessage("Please wait..");
+                progressDialog.show();
+                volleyUtils.generatePin(new NetworkResponse() {
+                    @Override
+                    public void receiveResult(Object result) {
+                        try {
+                            JSONObject jsonObject=new JSONObject(result.toString());
+                            progressDialog.dismiss();
+                            intent.putExtra("pin",jsonObject.getString("pin"));
+                            startActivityForResult(intent,100);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+
+                    }
+                },new ErrorVolleyUtils(mContext,progressDialog));
                 break;
 
         }

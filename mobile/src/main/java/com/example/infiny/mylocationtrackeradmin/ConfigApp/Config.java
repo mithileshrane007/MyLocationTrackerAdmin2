@@ -5,4 +5,6 @@ package com.example.infiny.mylocationtrackeradmin.ConfigApp;
  */
 public class Config {
     public static final String BASE_URL = "http://192.168.1.169:3000/";  //Localhost
+    public static final String TARGET="target";
+    public static final String CREATOR="creator";
 }

@@ -4,8 +4,7 @@ import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -19,12 +18,12 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.infiny.mylocationtrackeradmin.ConfigApp.Config;
 import com.example.infiny.mylocationtrackeradmin.Helpers.SessionManager;
 import com.example.infiny.mylocationtrackeradmin.Interfaces.NetworkResponse;
 import com.example.infiny.mylocationtrackeradmin.NetworkUtils.ErrorVolleyUtils;
 import com.example.infiny.mylocationtrackeradmin.NetworkUtils.VolleyUtils;
 import com.example.infiny.mylocationtrackeradmin.R;
-import com.example.infiny.mylocationtrackeradmin.Utils.BlurBuilder;
 
 import org.json.JSONObject;
 
@@ -32,14 +31,18 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.example.infiny.mylocationtrackeradmin.R.id.tv_addr;
+import static com.example.infiny.mylocationtrackeradmin.R.id.tv_passwd_signup_confirm_txt;
+
+
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
 
     RelativeLayout content_sign_up,rel_signup,rel_login,rel_login_sucess;
-    TextView tv_cmpy_id_txt,tv_passwd_txt,tv_register,tv_details_sucess1;
-    TextView tv_cmpy_name_title,tv_owner_name_title,tv_time_interval_title,tv_time_out_title;
+    TextView tv_register,tv_details_sucess1;
 
     EditText tv_cmpy_id,tv_passwd;
-    EditText tv_cmpy_name,tv_owner_name,tv_time_interval,tv_time_out,tv_passwd_signup;
+    EditText tv_name,tv_email,tv_time_interval,tv_phone,tv_passwd_signup,tv_passwd_signup_confirm;
+
     Button btn_sign_in,btn_sign_up,btn_continue;
     VolleyUtils volleyUtils;
     SessionManager sessionManager;
@@ -53,7 +56,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_sign_up);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().hide();
+        getSupportActionBar().setTitle("My Tracker");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mContext=this;
 
         sessionManager=new SessionManager(mContext);
@@ -65,23 +69,17 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         rel_login= (RelativeLayout) findViewById(R.id.rel_login);
         rel_login_sucess= (RelativeLayout) findViewById(R.id.rel_login_sucess);
 
-        tv_cmpy_id_txt= (TextView) findViewById(R.id.tv_cmpy_id_txt);
-        tv_passwd_txt= (TextView) findViewById(R.id.tv_passwd_txt);
-        tv_register= (TextView) findViewById(R.id.tv_register);
-        tv_cmpy_name_title= (TextView) findViewById(R.id.tv_cmpy_name_title);
-        tv_owner_name_title= (TextView) findViewById(R.id.tv_owner_name_title);
-        tv_time_interval_title= (TextView) findViewById(R.id.tv_time_interval_title);
-        tv_time_out_title= (TextView) findViewById(R.id.tv_time_out_title);
-        tv_details_sucess1= (TextView) findViewById(R.id.tv_details_sucess1);
 
         tv_cmpy_id= (EditText) findViewById(R.id.tv_cmpy_id);
         tv_passwd= (EditText) findViewById(R.id.tv_passwd);
-        tv_cmpy_name= (EditText) findViewById(R.id.tv_cmpy_name);
-        tv_owner_name= (EditText) findViewById(R.id.tv_owner_name);
+        tv_name= (EditText) findViewById(R.id.tv_cmpy_name);
+        tv_email= (EditText) findViewById(R.id.tv_owner_name);
         tv_time_interval= (EditText) findViewById(R.id.tv_time_interval);
-        tv_time_out= (EditText) findViewById(R.id.tv_time_out);
+        tv_phone= (EditText) findViewById(tv_addr);
         tv_passwd_signup= (EditText) findViewById(R.id.tv_passwd_signup);
-
+        tv_passwd_signup_confirm= (EditText) findViewById(R.id.tv_passwd_signup_confirm);
+        tv_register= (TextView) findViewById(R.id.tv_register);
+        tv_details_sucess1= (TextView) findViewById(R.id.tv_details_sucess1);
         btn_sign_in= (Button) findViewById(R.id.btn_sign_in);
         btn_sign_up= (Button) findViewById(R.id.btn_sign_up);
         btn_continue= (Button) findViewById(R.id.btn_continue);
@@ -103,15 +101,16 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         tv_register.setOnClickListener(this);
         btn_continue.setOnClickListener(this);
         tv_time_interval.setOnClickListener(this);
-        tv_time_out.setOnClickListener(this);
+//        tv_time_out.setOnClickListener(this);
 
-        hideSoftKeyboard(tv_time_out);
-        tv_time_out.setFocusable(false);
+//        hideSoftKeyboard(tv_time_out);
+//        tv_time_out.setFocusable(false);
         hideSoftKeyboard(tv_time_interval);
         tv_time_interval.setFocusable(false);
 
-        content_sign_up.setBackground(new BitmapDrawable(getResources(), BlurBuilder.blur(this,BitmapFactory.decodeResource(getResources(),R.drawable.homescreen_min))));
+//        content_sign_up.setBackground(new BitmapDrawable(getResources(), BlurBuilder.blur(this,BitmapFactory.decodeResource(getResources(),R.drawable.homescreen_min))));
 
+        content_sign_up.setBackgroundColor(Color.WHITE);
     }
 
     @Override
@@ -142,41 +141,47 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         {
             case R.id.btn_sign_in:
                 try {
-                    progressDialog.show();
+                    if (validate_Uid_Pass()) {
+                        progressDialog.show();
 
-                    params=  new HashMap<String, String>();
-                    params.put("company_id",tv_cmpy_id.getText().toString());
-                    params.put("password",tv_passwd.getText().toString());
-                    volleyUtils.signIn(params, new NetworkResponse() {
-                        @Override
-                        public void receiveResult(Object result) {
-                            try {
-                                progressDialog.dismiss();
+                        params=  new HashMap<String, String>();
+                        params.put("login_id",tv_cmpy_id.getText().toString().trim());
+                        params.put("password",tv_passwd.getText().toString());
+                        volleyUtils.signIn(params, new NetworkResponse() {
+                            @Override
+                            public void receiveResult(Object result) {
+                                try {
+                                    progressDialog.dismiss();
 
-                                JSONObject jsonObject=new JSONObject(result.toString());
-                                switch (jsonObject.getString("error"))
-                                {
-                                    case "0":
-                                        startActivity(new Intent(SignUpActivity.this,TargetActivity.class));
-                                        sessionManager.storeCompanyID(tv_cmpy_id.getText().toString().trim());
-                                        sessionManager.setLogin(true);
-                                        tv_cmpy_id.setText("");
-                                        tv_passwd.setText("");
-                                        break;
-                                    case "1002":
-                                        Toast.makeText(mContext,"Invalid details.",Toast.LENGTH_SHORT).show();
-                                        break;
-                                    case "1003":
-                                        Toast.makeText(mContext,"Data is invalid",Toast.LENGTH_SHORT).show();
+                                    JSONObject jsonObject=new JSONObject(result.toString());
+                                    switch (jsonObject.getString("error"))
+                                    {
+                                        case "0":
+                                            startActivity(new Intent(SignUpActivity.this,TargetActivity.class));
+                                            sessionManager.storeCompanyID(tv_cmpy_id.getText().toString().trim());
+                                            sessionManager.setLogin(true);
+                                            tv_cmpy_id.setText("");
+                                            tv_passwd.setText("");
+                                            break;
+                                        case "1002":
+                                            Toast.makeText(mContext,"Invalid credentials.",Toast.LENGTH_SHORT).show();
 
-                                        break;
+                                            break;
+                                        case "1003":
+                                            Toast.makeText(mContext,"Data is invalid",Toast.LENGTH_SHORT).show();
+
+                                            break;
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
 
-                        }
-                    },new ErrorVolleyUtils(mContext,progressDialog));
+                            }
+                        },new ErrorVolleyUtils(mContext,progressDialog));
+                    } else {
+
+
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                     if (progressDialog.isShowing())
@@ -188,46 +193,50 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.btn_sign_up:
 
                 try {
-                    progressDialog.show();
+                    if (validate_SignUp()) {
+                        progressDialog.show();
 
-                    params=  new HashMap<String, String>();
-                    params.put("name",tv_cmpy_name.getText().toString());
-                    params.put("time_interval",tv_time_interval.getText().toString());
-                    params.put("time_out",tv_time_out.getText().toString());
-                    params.put("password",tv_passwd_signup.getText().toString());
-                    params.put("owner_name",tv_owner_name.getText().toString());
+                        params=  new HashMap<String, String>();
+                        params.put("name",tv_name.getText().toString());
+                        params.put("phone",tv_phone.getText().toString());
+                        params.put("password",tv_passwd_signup.getText().toString());
+                        params.put("email",tv_email.getText().toString());
+                        params.put("user_type", Config.CREATOR);
 
-                    volleyUtils.signUp(params, new NetworkResponse() {
-                        @Override
-                        public void receiveResult(Object result) {
-                            try {
-                                progressDialog.dismiss();
 
-                                JSONObject jsonObject=new JSONObject(result.toString());
-                                switch (jsonObject.getString("error"))
-                                {
-                                    case "0":
-                                        rel_signup.setVisibility(View.GONE);
-                                        rel_login.setVisibility(View.GONE);
-                                        rel_login_sucess.setVisibility(View.VISIBLE);
-                                        flagScreen=2;
-                                        tv_details_sucess1.setText(jsonObject.getString("company_user_id"));
-                                        Toast.makeText(mContext,"Successfully Created",Toast.LENGTH_SHORT).show();
-                                        break;
-                                    case "1002":
-                                        rel_signup.setVisibility(View.VISIBLE);
-                                        rel_login.setVisibility(View.GONE);
-                                        rel_login_sucess.setVisibility(View.GONE);
+                        volleyUtils.signUp(params, new NetworkResponse() {
+                            @Override
+                            public void receiveResult(Object result) {
+                                try {
+                                    progressDialog.dismiss();
 
-                                        Toast.makeText(mContext,R.string.some_went_wrong_only,Toast.LENGTH_SHORT).show();
-                                        break;
+                                    JSONObject jsonObject=new JSONObject(result.toString());
+                                    switch (jsonObject.getString("error"))
+                                    {
+                                        case "0":
+                                            rel_signup.setVisibility(View.GONE);
+                                            rel_login.setVisibility(View.GONE);
+                                            rel_login_sucess.setVisibility(View.VISIBLE);
+                                            flagScreen=2;
+                                            tv_details_sucess1.setText(jsonObject.getString("code"));
+                                            Toast.makeText(mContext,"Successfully Created",Toast.LENGTH_SHORT).show();
+                                            break;
+                                        case "1002":
+                                            rel_signup.setVisibility(View.VISIBLE);
+                                            rel_login.setVisibility(View.GONE);
+                                            rel_login_sucess.setVisibility(View.GONE);
+
+                                            Toast.makeText(mContext,R.string.some_went_wrong_only,Toast.LENGTH_SHORT).show();
+                                            break;
+                                    }
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
                             }
-                        }
-                    },new ErrorVolleyUtils(mContext,progressDialog));
+                        },new ErrorVolleyUtils(mContext,progressDialog));
+                    } else {
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                     if (progressDialog.isShowing())
@@ -245,11 +254,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 showTime(tv_time_interval);
                 break;
 
-            case R.id.tv_time_out:
-
-                showTime(tv_time_out);
-                break;
-
             case R.id.btn_continue:
 
                 flagScreen=0;
@@ -257,13 +261,149 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 rel_signup.setVisibility(View.GONE);
                 rel_login.setVisibility(View.VISIBLE);
                 rel_login_sucess.setVisibility(View.GONE);
-                tv_cmpy_name.setText("");
-                tv_owner_name.setText("");
+                tv_name.setText("");
+                tv_email.setText("");
                 tv_time_interval.setText("");
-                tv_time_out.setText("");
+                tv_phone.setText("");
                 tv_passwd.setText("");
+                tv_passwd_signup_confirm.setText("");
+                tv_passwd_signup.setText("");
+                tv_cmpy_id.setText("");
                 break;
         }
+    }
+
+    private boolean validate_SignUp() {
+        boolean tv_emailBool= tv_email.getText().toString().contains("@") && tv_email.getText().toString().contains(".");
+
+        if (tv_name.getText().toString().equals("")||tv_email.getText().toString().equals("")||tv_phone.getText().toString().equals("")||tv_passwd_signup.getText().toString().equals("")||!tv_emailBool)
+        {
+
+            if (tv_name.getText().toString().equals(""))
+            {
+                tv_name.setFocusable(true);
+
+                tv_name.setError("Invalid Name");
+            }
+            else {
+                tv_name.setError(null);
+
+            }
+
+
+            if (tv_email.getText().toString().equals(""))
+            {
+                tv_email.setFocusable(true);
+
+                tv_email.setError("Invalid Email");
+            }
+            else {
+                tv_email.setError(null);
+
+            }
+            if (!tv_emailBool)
+            {
+                tv_email.setFocusable(true);
+
+                tv_email.setError("Invalid Email");
+            }
+            else {
+                tv_email.setError(null);
+
+            }
+
+            if (tv_phone.getText().toString().equals(""))
+            {
+                tv_phone.setFocusable(true);
+
+                tv_phone.setError("Invalid Phone");
+            }
+            else {
+                tv_phone.setError(null);
+
+            }
+
+
+            if (tv_passwd_signup.getText().toString().equals(""))
+            {
+                tv_passwd_signup.setFocusable(true);
+
+                tv_passwd_signup.setError("Invalid Password");
+            }
+            else {
+                tv_passwd_signup.setError(null);
+
+            }
+            if (tv_passwd_signup_confirm.getText().toString().equals(""))
+            {
+                tv_passwd_signup_confirm.setFocusable(true);
+                tv_passwd_signup_confirm.setError("Invalid Confirm Password");
+            }
+            else {
+                tv_passwd_signup_confirm.setError(null);
+
+            }
+
+
+            return false;
+        }
+        else {
+
+
+            if (tv_passwd_signup_confirm.getText().toString().equals(""))
+            {
+                tv_passwd_signup_confirm.setFocusable(true);
+                tv_passwd_signup_confirm.setError("Password mismatch");
+                return  false;
+            }
+            else {
+                if(tv_passwd_signup.getText().toString().trim().equals(tv_passwd_signup_confirm.getText().toString().trim())){
+                    return true;
+                }
+                else {
+                    tv_passwd_signup_confirm.setError("Password mismatch");
+                    return false;
+                }
+            }
+        }
+    }
+
+    private boolean validate_Uid_Pass() {
+        if (tv_cmpy_id.getText().toString().equals("")||tv_passwd.getText().toString().equals(""))
+        {
+
+            if (tv_cmpy_id.getText().toString().equals(""))
+            {
+                tv_cmpy_id.setFocusable(true);
+                tv_cmpy_id.setError("Invalid Company ID");
+            }
+            else {
+                tv_cmpy_id.setError(null);
+
+            }
+
+
+            if (tv_passwd.getText().toString().equals(""))
+            {
+                tv_passwd.setFocusable(true);
+
+                tv_passwd.setError("Invalid Password");
+            }
+            else {
+                tv_passwd.setError(null);
+
+            }
+
+
+
+            return false;
+        }
+        else {
+
+
+            return true;
+        }
+
     }
 
     private void showTime(final EditText editText) {
@@ -292,11 +432,20 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             rel_signup.setVisibility(View.GONE);
             rel_login.setVisibility(View.VISIBLE);
             rel_login_sucess.setVisibility(View.GONE);
+            tv_name.setText("");
+            tv_email.setText("");
+            tv_time_interval.setText("");
+            tv_phone.setText("");
+            tv_passwd.setText("");
+            tv_passwd_signup.setText("");
+            tv_cmpy_id.setText("");
 
 
         }else if (flagScreen==2)
         {
             rel_login_sucess.setVisibility(View.VISIBLE);
+            tv_cmpy_id.setText("");
+            tv_passwd.setText("");
 
 
         }
