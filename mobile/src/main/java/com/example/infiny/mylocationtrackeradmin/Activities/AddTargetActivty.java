@@ -219,7 +219,6 @@ public class AddTargetActivty extends AppCompatActivity {
             public void onClick(View view) {
                 if (validateData())
                 {
-
                     Map<String, String> params = new HashMap<String, String>();
                     params.put("name",tv_name.getEditText().getText().toString());
                     params.put("user_type", Config.TARGET);
