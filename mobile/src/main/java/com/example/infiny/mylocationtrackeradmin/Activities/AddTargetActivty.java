@@ -233,7 +233,6 @@ public class AddTargetActivty extends AppCompatActivity {
                     params.put("login_id",sessionManager.getCompanyID());
                     params.put("password",tv_pass.getEditText().getText().toString());
                     params.put("track_id_reg",tv_tracker_id.getText().toString());
-
                     try {
                         final ProgressDialog progressDialog=new ProgressDialog(mContext);
                         progressDialog.setCancelable(false);
