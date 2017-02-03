@@ -40,6 +40,7 @@ import com.example.infiny.mylocationtrackeradmin.Models.User_list;
 import com.example.infiny.mylocationtrackeradmin.NetworkUtils.ErrorVolleyUtils;
 import com.example.infiny.mylocationtrackeradmin.NetworkUtils.VolleyUtils;
 import com.example.infiny.mylocationtrackeradmin.R;
+import com.example.infiny.mylocationtrackeradmin.Utils.DFragment;
 import com.example.infiny.mylocationtrackeradmin.Utils.ExifUtils;
 
 import org.json.JSONObject;
@@ -151,10 +152,11 @@ public class AddTargetActivty extends AppCompatActivity {
         hideSoftKeyboard(tv_dob.getEditText());
         tv_dob.getEditText().setFocusable(false);
         btn_add_target= (Button) findViewById(R.id.btn_add_target);
-        if(getIntent().getStringExtra("pin")==null)
-            bundle= (User_list) getIntent().getSerializableExtra("details");
+        if(getIntent().getStringExtra("pin")==null) {
+            bundle = (User_list) getIntent().getSerializableExtra("details");
+            pin_string=getIntent().getStringExtra("pin");
+        }
 
-        pin_string=getIntent().getStringExtra("pin");
         if (bundle!=null)
         {
 
@@ -187,7 +189,7 @@ public class AddTargetActivty extends AppCompatActivity {
             tv_tracker_id.setEnabled(false);
             switch_type.setEnabled(false);
         }
-        generatePIN();
+//        generatePIN();
 
         btn_add_target.setVisibility(View.VISIBLE);
 
@@ -232,7 +234,6 @@ public class AddTargetActivty extends AppCompatActivity {
                     params.put("job_time_out",tv_time_out.getEditText().getText().toString());
                     params.put("login_id",sessionManager.getCompanyID());
                     params.put("password",tv_pass.getEditText().getText().toString());
-                    params.put("track_id_reg",tv_tracker_id.getText().toString());
                     try {
                         final ProgressDialog progressDialog=new ProgressDialog(mContext);
                         progressDialog.setCancelable(false);
@@ -250,8 +251,21 @@ public class AddTargetActivty extends AppCompatActivity {
                                     {
 
                                         case "0":
-                                            setResult(101);
-                                            finish();//finishing activity
+
+                                            final DFragment dFragment=new DFragment();
+                                            dFragment.show(getSupportFragmentManager(),"pin");
+
+                                            dFragment.getDialog().setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                                @Override
+                                                public void onDismiss(DialogInterface dialogInterface) {
+                                                    setResult(101);
+                                                    dFragment.dismiss();
+
+                                                    finish();//finishing activity
+
+                                                }
+                                            });
+
 
                                             Toast.makeText(mContext,"Successfully added.",Toast.LENGTH_SHORT).show();
                                             break;
@@ -282,7 +296,6 @@ public class AddTargetActivty extends AppCompatActivity {
                             }
                         },new ErrorVolleyUtils(mContext,progressDialog));
                     } catch (Exception e) {
-
                         e.printStackTrace();
                     }
                 }else {
@@ -565,8 +578,8 @@ public class AddTargetActivty extends AppCompatActivity {
 
     private boolean validateData() {
         boolean tv_emailBool= tv_email.getEditText().getText().toString().contains("@") && tv_email.getEditText().getText().toString().contains(".");
-        if (tv_name.getEditText().getText().toString().equals("")||tv_dob.getEditText().getText().toString().equals("") ||tv_addr.getEditText().getText().toString().equals("")||tv_phone.getEditText().getText().toString().equals("")
-             ||tv_pass.getEditText().getText().toString().equals("")   || image_string.toString().equals("") ||tv_email.getEditText().getText().toString().equals("")||tv_desp.getEditText().getText().toString().equals("")||!tv_emailBool ||tv_phone.getEditText().getText().toString().length()!=10 ||tv_time_interval.getEditText().getText().toString().equals("")||tv_time_out.getEditText().getText().toString().equals(""))
+        if (tv_name.getEditText().getText().toString().equals("")/*||tv_dob.getEditText().getText().toString().equals("") ||tv_addr.getEditText().getText().toString().equals("")||tv_phone.getEditText().getText().toString().equals("")
+             ||tv_pass.getEditText().getText().toString().equals("")   || image_string.toString().equals("") ||tv_email.getEditText().getText().toString().equals("")||tv_desp.getEditText().getText().toString().equals("")||!tv_emailBool ||tv_phone.getEditText().getText().toString().length()!=10 ||tv_time_interval.getEditText().getText().toString().equals("")||tv_time_out.getEditText().getText().toString().equals("")*/)
         {
 
             if (tv_name.getEditText().getText().toString().equals(""))

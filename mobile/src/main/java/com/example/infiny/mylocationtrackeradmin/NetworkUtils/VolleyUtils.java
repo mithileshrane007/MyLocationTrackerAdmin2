@@ -237,7 +237,7 @@ public class VolleyUtils {
     public void signIn(final Map<String, String> params, final NetworkResponse callback, final ErrorVolleyUtils errorCall){
 
 
-        String url= Config.BASE_URL + "api_login";
+        String url= Config.BASE_URL + "api_get_user_list";
         StringRequest request=new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

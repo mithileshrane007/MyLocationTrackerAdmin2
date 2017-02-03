@@ -181,7 +181,8 @@
                 android:id="@+id/tv_pass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_time_out">
+                android:layout_below="@+id/tv_time_out"
+                android:visibility="gone">
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -245,24 +245,27 @@ public class TargetActivity extends AppCompatActivity implements IClickListener 
 
             case R.id.add_target:
                 final Intent intent=new Intent(this,AddTargetActivty.class);
-                final ProgressDialog progressDialog=new ProgressDialog(mContext);
-                progressDialog.setMessage("Please wait..");
-                progressDialog.show();
-                volleyUtils.generatePin(new NetworkResponse() {
-                    @Override
-                    public void receiveResult(Object result) {
-                        try {
-                            JSONObject jsonObject=new JSONObject(result.toString());
-                            progressDialog.dismiss();
-                            intent.putExtra("pin",jsonObject.getString("pin"));
-                            startActivityForResult(intent,100);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+//                final ProgressDialog progressDialog=new ProgressDialog(mContext);
+//                progressDialog.setMessage("Please wait..");
+//                progressDialog.show();
 
+                startActivityForResult(intent,100);
 
-                    }
-                },new ErrorVolleyUtils(mContext,progressDialog));
+//                volleyUtils.generatePin(new NetworkResponse() {
+//                    @Override
+//                    public void receiveResult(Object result) {
+//                        try {
+//                            JSONObject jsonObject=new JSONObject(result.toString());
+//                            progressDialog.dismiss();
+////                            intent.putExtra("pin",jsonObject.getString("pin"));
+////                            startActivityForResult(intent,100);
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
+//
+//
+//                    }
+//                },new ErrorVolleyUtils(mContext,progressDialog));
                 break;
 
         }

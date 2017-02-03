@@ -17,4 +17,5 @@
     <string name="choose_image">Select picture</string>
     <string name="Choose_from_gallery">From Gallery</string>
     <string name="no_image">Please add image.</string>
+    <string name="yourCode">Your Code is: \n</string>
 </resources>
